@@ -109,15 +109,32 @@ function repaint() {
         ctx.fillStyle = e.color;
         switch (e.share) {
             case ShapeCircle:
-                
+                ctx.beginPath();
+                ctx.arc(e.x,e.y,e.radius,0,Math.PI*2);
+                ctx.closePath();
+                ctx.fill();
                 break;
             case ShapeRectangle:
+                ctx.fillRect(e.x,e.y,e.w,e.h);
                 break;
-
             case ShapeLine:
+                ctx.beginPath();
+                ctx.moveTo(e.x0,e.y0);
+                ctx.lineTo(e.x1,e.y1);
+                ctx.stroke();
                 break;
         }
     }
+
+    ctx.fillText("score:" + score,200,30);
+    ctx.fillStyle = "yellow";
+    ctx.beginPath();
+    ctx.arc(475,390+offset,10,0,Math.PI*2);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = "gray";
+    ctx.fillRect(455,400+offset,40,200);
 
 
 }
