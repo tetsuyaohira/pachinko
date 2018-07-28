@@ -40,7 +40,20 @@ function init() {
 
 
     // 釘
+    for (var i = 0; i < 9; i++) {
+        for (var j = 0; j < 8 + i % 2; j++) {
+            var x = (j * 50 + 50) - 25 * (i % 2);
+            var r = new CircleEntity(x, i * 50 + 100, 5, BodyStatic, 1);
+            r.color = "blue";
+            engine.entities.push(r);
+        }
+    }
 
+    catcher = new RectangleEntity(0, 550, 150, 25);
+    catcher.color = "gold";
+    catcher.sign = 1;
+
+    engine.entities.push(catcher);
 
     // その他（Canvas,Timer）の初期化
     ctx = canvas.getContext("2d");
@@ -63,14 +76,49 @@ function tick() {
 }
 
 function mymousedown(e) {
+    isMouseDown = true;
 
 }
 
 function mymouseup(e) {
+    isMouseDown= false;
+    var r = new CircleEntity(475,400,10,BodyDynamic);
+    r.color = "yellow";
+    r.velocity.y = -offset /5;
+    r.onhit = function (me,peer) {
+        if (peer == catcher) {
+            engine.entities = engine.entities.filter(function(e){
+                return e !=me;
+            });
+            score++;
+        }
+    }
 
+    offset = 0;
+    engine.entities.push(r);
 }
 
 function repaint() {
+    // 背景クリア
+    ctx.fillStyle = "#006600";
+    ctx.fillRect(0,0,500,600);
+
+    // ボール　壁の描画
+    for(var i=0;i<engine.entities.length;i++){
+        var e = engine.entities[i];
+        ctx.fillStyle = e.color;
+        switch (e.share) {
+            case ShapeCircle:
+                
+                break;
+            case ShapeRectangle:
+                break;
+
+            case ShapeLine:
+                break;
+        }
+    }
+
 
 }
 
