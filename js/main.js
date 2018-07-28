@@ -1,13 +1,13 @@
 "use strict";
-var ctx, engine, offset = 0, catcher, score = 0, isMouseDown = false;
+let ctx, engine, offset = 0, catcher, score = 0, isMouseDown = false;
 
-var walls = [
+const walls = [
     [-100, -100, 100, 800],
     [-100, -100, 800, 100],
     [500, -100, 100, 800],
 ];
 
-var lines = [
+const lines = [
     [150, -50, -50, 150],
     [350, -50, 550, 150],
     [450, 200, 450, 800],
@@ -44,7 +44,7 @@ function init() {
         for (var j = 0; j < 8 + i % 2; j++) {
             var x = (j * 50 + 50) - 25 * (i % 2);
             var r = new CircleEntity(x, i * 50 + 100, 5, BodyStatic, 1);
-            r.color = "blue";
+            r.color = "gray";
             engine.entities.push(r);
         }
     }
@@ -59,8 +59,7 @@ function init() {
     ctx = canvas.getContext("2d");
     ctx.font = "20pt Arial";
     ctx.strokeStyle = "blue";
-    var timer = setInterval(tick, 50);
-
+    setInterval(tick, 50);
 }
 
 function tick() {
@@ -81,14 +80,14 @@ function mymousedown(e) {
 }
 
 function mymouseup(e) {
-    isMouseDown= false;
-    var r = new CircleEntity(475,400,10,BodyDynamic);
+    isMouseDown = false;
+    var r = new CircleEntity(475, 400, 10, BodyDynamic);
     r.color = "yellow";
-    r.velocity.y = -offset /5;
-    r.onhit = function (me,peer) {
+    r.velocity.y = -offset / 5;
+    r.onhit = function (me, peer) {
         if (peer == catcher) {
-            engine.entities = engine.entities.filter(function(e){
-                return e !=me;
+            engine.entities = engine.entities.filter(function (e) {
+                return e != me;
             });
             score++;
         }
@@ -101,41 +100,39 @@ function mymouseup(e) {
 function repaint() {
     // 背景クリア
     ctx.fillStyle = "#006600";
-    ctx.fillRect(0,0,500,600);
+    ctx.fillRect(0, 0, 500, 600);
 
     // ボール　壁の描画
-    for(var i=0;i<engine.entities.length;i++){
+    for (var i = 0; i < engine.entities.length; i++) {
         var e = engine.entities[i];
         ctx.fillStyle = e.color;
-        switch (e.share) {
+        switch (e.shape) {
             case ShapeCircle:
                 ctx.beginPath();
-                ctx.arc(e.x,e.y,e.radius,0,Math.PI*2);
+                ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
                 ctx.closePath();
                 ctx.fill();
                 break;
             case ShapeRectangle:
-                ctx.fillRect(e.x,e.y,e.w,e.h);
+                ctx.fillRect(e.x, e.y, e.w, e.h);
                 break;
             case ShapeLine:
                 ctx.beginPath();
-                ctx.moveTo(e.x0,e.y0);
-                ctx.lineTo(e.x1,e.y1);
+                ctx.moveTo(e.x0, e.y0);
+                ctx.lineTo(e.x1, e.y1);
                 ctx.stroke();
                 break;
         }
     }
 
-    ctx.fillText("score:" + score,200,30);
+    ctx.fillText("score:" + score, 200, 30);
     ctx.fillStyle = "yellow";
     ctx.beginPath();
-    ctx.arc(475,390+offset,10,0,Math.PI*2);
+    ctx.arc(475, 390 + offset, 10, 0, Math.PI * 2);
     ctx.closePath();
     ctx.fill();
 
-    ctx.fillStyle = "gray";
-    ctx.fillRect(455,400+offset,40,200);
-
+    ctx.fillStyle = "blue";
+    ctx.fillRect(455, 400 + offset, 40, 200);
 
 }
-
